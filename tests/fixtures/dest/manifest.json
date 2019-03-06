@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Rollup Plugin Auto Manifest",
+  "version": "0.1.1",
+  "description": "Create and update your Chrome Extension manifest.json automagically ✨.",
+  "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
+  "sample": "new manifest entry!",
+  "permissions": [
+    "contextMenus",
+    "cookies",
+    "notifications",
+    "proxy"
+  ]
+}
