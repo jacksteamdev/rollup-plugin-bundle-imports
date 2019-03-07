@@ -1,23 +1,15 @@
 /* eslint-env node */
 
-const plugins = []
+import codeString from '../src/index'
+
+const plugins = [codeString()]
 
 export default [
   {
-    input: 'tests/fixtures/src/background.js',
+    input: 'tests/fixtures/src/entry.js',
     output: [
       {
-        file: 'tests/fixtures/dest/background-esm.js',
-        format: 'esm',
-      },
-    ],
-    plugins,
-  },
-  {
-    input: 'tests/fixtures/src/content.js',
-    output: [
-      {
-        file: 'tests/fixtures/dest/content.js',
+        file: 'tests/fixtures/dest/entry-esm.js',
         format: 'esm',
       },
     ],
