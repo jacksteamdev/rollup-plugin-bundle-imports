@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-import codeString from '../src/index'
+import codeString from '../../../src/index'
 
 const codeStringSpy = codeString()
 
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'test') {
 const plugins = [codeStringSpy]
 
 export default {
-  input: 'tests/fixtures/src/entry.js',
+  input: 'tests/fixtures/basic/entry.js',
   output: {
     file: 'tests/fixtures/dest/entry-esm.js',
     format: 'esm',

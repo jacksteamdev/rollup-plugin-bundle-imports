@@ -28,7 +28,8 @@
     ],
     "modulePathIgnorePatterns": [
       "fixtures"
-    ]
+    ],
+    "clearMocks": true
   },
   "files": [
     "build"

@@ -1,6 +1,6 @@
 import { rollup, watch } from 'rollup'
 import generateCode from '../../src/generateCode'
-import config from '../rollup.test.config'
+import config from '../fixtures/basic/rollup.test.basic.config'
 
 describe('build', () => {
   test('returns a string', async () => {
@@ -24,29 +24,75 @@ describe('build', () => {
 })
 
 describe('watch', () => {
-  test.only('successfully builds', done => {
-    const watcher = watch(config)
+  let watcher = null
+
+  beforeEach(() => {
+    watcher = watch(config)
+  })
+
+  afterEach(() => {
+    watcher.close()
+    watcher = null
+  })
+
+  test('does not error', done => {
     const spy = jest.fn()
 
-    const expectations = event => {
-      if (event.code === 'END') {
-        watcher.close()
-        done()
-      }
+    const expectations = () => {
+      expect(spy).toBeCalledTimes(4)
     }
 
     watcher.on('event', spy)
+
     watcher.on('event', event => {
-      switch (event.code) {
-        case 'START':
-        case 'BUNDLE_START':
-        case 'BUNDLE_END':
-          return
-        case 'END':
-          return expectations(event)
-        case 'ERROR':
-        case 'FATAL':
-          throw new Error(event.code)
+      try {
+        switch (event.code) {
+          case 'START':
+          case 'BUNDLE_START':
+          case 'BUNDLE_END':
+          case 'ERROR':
+            break
+
+          case 'END':
+            expectations(event)
+            done()
+            break
+
+          case 'FATAL':
+            throw new Error(event.code)
+        }
+      } catch (error) {
+        done.fail(error)
+      }
+    })
+  })
+
+  test('runs again after file change', done => {
+    const spy = jest.fn()
+
+    const expectations = () => {}
+
+    watcher.on('event', spy)
+
+    watcher.on('event', event => {
+      try {
+        switch (event.code) {
+          case 'START':
+          case 'BUNDLE_START':
+          case 'BUNDLE_END':
+          case 'ERROR':
+            break
+
+          case 'END':
+            expectations(event)
+            done()
+            break
+
+          case 'FATAL':
+            throw new Error(event.code)
+        }
+      } catch (error) {
+        done.fail(error)
       }
     })
   })
