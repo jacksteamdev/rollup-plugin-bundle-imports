@@ -25,6 +25,9 @@
     },
     "setupFilesAfterEnv": [
       "./tests/jest.setup.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "fixtures"
     ]
   },
   "files": [
