@@ -1,10 +1,15 @@
 import { createFilter } from 'rollup-pluginutils'
 import { rollup } from 'rollup'
 
+import generateCode from './generateCode'
+
 function codeString({
   include = '**/*.code.js',
   exclude,
   plugins,
+  output = {
+    format: 'iife',
+  },
 } = {}) {
   const filter = createFilter(include, exclude)
 
@@ -12,24 +17,18 @@ function codeString({
     name: 'code-string',
 
     async transform(_, id) {
-      console.log('transform')
-
       if (filter(id)) {
         const bundle = await rollup({
           input: id,
           plugins,
         })
 
-        const { output } = await bundle.generate({
-          format: 'iife',
+        const code = await generateCode(bundle, {
+          input: id,
+          output,
         })
 
-        const { code } = output.find(
-          ({ facadeModuleId }) => id === facadeModuleId,
-        )
-
         bundle.watchFiles.forEach(file => {
-          // console.log(file)
           this.addWatchFile(file)
         })
 
@@ -38,10 +37,6 @@ function codeString({
           map: { mappings: '' },
         }
       }
-    },
-
-    generateBundle(options, bundle) {
-      console.log('generateBundle')
     },
   }
 }
