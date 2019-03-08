@@ -17,7 +17,7 @@ export default {
   output: {
     file: 'tests/fixtures/dest/background.js',
     format: 'iife',
-    // preferConst: true,
+    preferConst: true,
   },
   plugins,
 }

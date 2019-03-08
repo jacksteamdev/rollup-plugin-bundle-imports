@@ -9,6 +9,7 @@ function codeString({
   plugins = [],
   output = {
     format: 'iife',
+    preferConst: true,
     // exports: 'none'
   },
 } = {}) {
@@ -19,7 +20,7 @@ function codeString({
 
     // Try the load hook instead
     // https://rollupjs.org/guide/en#load
-    async transform(_, id) {
+    async load(id) {
       if (!filter(id)) return null
 
       try {
