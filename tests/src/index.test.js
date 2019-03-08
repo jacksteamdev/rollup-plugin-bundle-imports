@@ -1,33 +1,44 @@
 import { rollup, watch } from 'rollup'
 import generateCode from '../../src/generateCode'
-import config from '../fixtures/basic/rollup.test.basic.config'
+import config1 from '../fixtures/basic/rollup.config'
+import config2 from '../fixtures/recursive/rollup.config'
 
 describe('build', () => {
   test('returns a string', async () => {
-    const bundle = await rollup(config)
+    const bundle = await rollup(config1)
 
-    const code = await generateCode(bundle, config)
+    const code = await generateCode(bundle, config1)
 
     expect(typeof code).toBe('string')
   })
 
   test('bundles all imports', async () => {
-    const bundle = await rollup(config)
+    const bundle = await rollup(config1)
 
-    const code = await generateCode(bundle, config)
+    const code = await generateCode(bundle, config1)
 
     expect(code).toContain('const add')
     expect(code).toContain('const b')
     expect(code).toContain('console.log(\'c\')')
     expect(code).toContain('const codeAsString')
   })
+
+  test.only('works recursively', async () => {
+    const bundle = await rollup(config2)
+
+    const code = await generateCode(bundle, config2)
+
+    expect(code).toContain('chrome.tabs')
+    expect(code).toContain('document.head')
+    expect(code).toContain('XMLHttpRequest')
+  })
 })
 
-describe('watch', () => {
+describe.skip('watch', () => {
   let watcher = null
 
   beforeEach(() => {
-    watcher = watch(config)
+    watcher = watch(config1)
   })
 
   afterEach(() => {
