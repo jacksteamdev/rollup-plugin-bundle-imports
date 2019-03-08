@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'test') {
 const plugins = [codeStringSpy]
 
 export default {
-  input: 'tests/fixtures/recursive/background.js',
+  input: 'tests/fixtures/modules/background.js',
   output: {
     file: 'tests/fixtures/dest/background.js',
     format: 'iife',

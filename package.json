@@ -28,7 +28,7 @@
       "./tests/jest.setup.js"
     ],
     "modulePathIgnorePatterns": [
-      "fixtures"
+      "fixtures/dest"
     ],
     "clearMocks": true
   },

@@ -4,7 +4,9 @@ import codeAsString1 from './content.code'
 import codeAsString2 from './injected.code'
 
 chrome.tabs.executeScript({
-  code: codeAsString1
-    .replace('%injected%', codeAsString2)
-    .replace('%message%', 'My message to you from beyond.'),
+  code: codeAsString1,
+})
+
+chrome.tabs.executeScript({
+  code: codeAsString2,
 })

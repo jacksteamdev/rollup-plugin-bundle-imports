@@ -1,7 +1,8 @@
 import { rollup, watch } from 'rollup'
 import generateCode from '../../src/generateCode'
 import config1 from '../fixtures/basic/rollup.config'
-import config2 from '../fixtures/recursive/rollup.config'
+import config2 from '../fixtures/modules/rollup.config'
+import config3 from '../fixtures/advanced/rollup.config'
 
 describe('build', () => {
   test('returns a string', async () => {
@@ -23,7 +24,7 @@ describe('build', () => {
     expect(code).toContain('const codeAsString')
   })
 
-  test.only('works with modules', async () => {
+  test('works with multiple imports', async () => {
     const bundle = await rollup(config2)
 
     const code = await generateCode(bundle, config2)
@@ -32,6 +33,16 @@ describe('build', () => {
     expect(code).toContain('document.head')
     expect(code).toContain('XMLHttpRequest')
     expect(code).toContain('clone.push')
+  })
+
+  test('works recursively', async () => {
+    const bundle = await rollup(config3)
+
+    const code = await generateCode(bundle, config3)
+
+    expect(code).toContain('chrome.tabs')
+    expect(code).toContain('document.head')
+    expect(code).toContain('XMLHttpRequest')
   })
 })
 

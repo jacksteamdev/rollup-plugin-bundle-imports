@@ -6,16 +6,17 @@ import resolve from 'rollup-plugin-node-resolve'
 import generateCode from './generateCode'
 
 function codeString({
-  include = '**/*.code.js',
+  include = ['**/*.code.js'],
   exclude,
   plugins = [resolve(), commonjs()],
   output = {
     format: 'iife',
     preferConst: true,
-    // exports: 'none'
+    exports: 'none',
   },
 } = {}) {
   const filter = createFilter(include, exclude)
+  const cache = {}
 
   return {
     name: 'code-string',
@@ -24,6 +25,33 @@ function codeString({
     // https://rollupjs.org/guide/en#load
     async load(id) {
       if (!filter(id)) return null
+
+      if (!plugins.some(({ name }) => name === 'code-string')) {
+        // Exclude this module from being reprocessed
+        plugins = [...plugins, codeString({ exclude: id })]
+      } else {
+        plugins = plugins.map(plugin => {
+          if (plugin.name === 'code-string') {
+            // Need to exclude different id
+            return codeString({ exclude: id })
+          } else {
+            return plugin
+          }
+        })
+      }
+
+      if (cache[id]) {
+        const code = `export default ${JSON.stringify(
+          cache[id],
+        )};`
+
+        delete cache[id]
+
+        return {
+          code,
+          map: { mappings: '' },
+        }
+      }
 
       try {
         const bundle = await rollup({
@@ -36,6 +64,8 @@ function codeString({
           output,
         })
 
+        cache[id] = code
+
         bundle.watchFiles.forEach(file => {
           this.addWatchFile(file)
         })
@@ -45,7 +75,7 @@ function codeString({
           map: { mappings: '' },
         }
       } catch (error) {
-        console.error(error)
+        this.error(error)
       }
     },
   }
