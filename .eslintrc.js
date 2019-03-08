@@ -1,13 +1,9 @@
 module.exports = {
   env: {
-    // browser: true,
     es6: true,
+    node: true,
   },
   extends: 'eslint:recommended',
-  globals: {
-    // chrome: true,
-    // chromep: true,
-  },
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
@@ -26,5 +22,13 @@ module.exports = {
     'no-console': 'off',
     quotes: ['warn', 'single'],
     semi: ['warn', 'never'],
+    'no-unused-vars': [
+      'error',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+      },
+    ],
   },
 }
