@@ -1,12 +1,14 @@
 import { createFilter } from 'rollup-pluginutils'
 import { rollup } from 'rollup'
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
 
 import generateCode from './generateCode'
 
 function codeString({
   include = '**/*.code.js',
   exclude,
-  plugins = [],
+  plugins = [resolve(), commonjs()],
   output = {
     format: 'iife',
     preferConst: true,

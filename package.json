@@ -8,6 +8,7 @@
   "license": "MIT",
   "devDependencies": {
     "@sucrase/jest-plugin": "^2.0.0",
+    "dedupe": "^3.0.1",
     "eslint": "^5.11.0",
     "jest": "^24.1.0",
     "sucrase": "^3.9.5"
@@ -35,7 +36,9 @@
     "build"
   ],
   "dependencies": {
-    "rollup-pluginutils": "^2.4.1",
-    "rollup": "^1.4.1"
+    "rollup": "^1.4.1",
+    "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-pluginutils": "^2.4.1"
   }
 }

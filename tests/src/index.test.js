@@ -23,7 +23,7 @@ describe('build', () => {
     expect(code).toContain('const codeAsString')
   })
 
-  test.only('works recursively', async () => {
+  test.only('works with modules', async () => {
     const bundle = await rollup(config2)
 
     const code = await generateCode(bundle, config2)
@@ -31,10 +31,11 @@ describe('build', () => {
     expect(code).toContain('chrome.tabs')
     expect(code).toContain('document.head')
     expect(code).toContain('XMLHttpRequest')
+    expect(code).toContain('clone.push')
   })
 })
 
-describe.skip('watch', () => {
+describe('watch', () => {
   let watcher = null
 
   beforeEach(() => {
