@@ -47,78 +47,78 @@ describe('build', () => {
 })
 
 describe('watch', () => {
-  let watcher = null
-
-  beforeEach(() => {
-    watcher = watch(config1)
-  })
-
-  afterEach(() => {
-    watcher.close()
-    watcher = null
-  })
-
-  test('does not error', done => {
+  test('basic config watch', done => {
     const spy = jest.fn()
+    const config = config1
 
-    const expectations = () => {
+    const expects = () => {
+      // Expect watcher not to error
+      expect(
+        spy.mock.calls.some(([{ code }]) => code === 'ERROR'),
+      ).toBeFalsy()
+      expect(
+        spy.mock.calls.some(([{ code }]) => code === 'FATAL'),
+      ).toBeFalsy()
+
+      // Expect correct events to fire
+      expect(spy).toBeCalledWith({ code: 'START' })
+      expect(spy).toBeCalledWith({ code: 'END' })
+      expect(
+        spy.mock.calls.some(
+          ([{ code }]) => code === 'BUNDLE_START',
+        ),
+      ).toBeTruthy()
+      expect(
+        spy.mock.calls.some(
+          ([{ code }]) => code === 'BUNDLE_END',
+        ),
+      ).toBeTruthy()
+
+      // Expect correct amount of activity
       expect(spy).toBeCalledTimes(4)
     }
 
-    watcher.on('event', spy)
-
-    watcher.on('event', event => {
-      try {
-        switch (event.code) {
-          case 'START':
-          case 'BUNDLE_START':
-          case 'BUNDLE_END':
-          case 'ERROR':
-            break
-
-          case 'END':
-            expectations(event)
-            done()
-            break
-
-          case 'FATAL':
-            throw new Error(event.code)
-        }
-      } catch (error) {
-        done.fail(error)
-      }
-    })
+    setupWatcher({ expects, config, done, spy })
   })
 
-  test('runs again after file change', done => {
+  test('basic config watch with changes', done => {
     const spy = jest.fn()
+    const config = config1
 
-    const expectations = () => {
-      throw 'no tests written'
+    const expects = () => {
+      // Test that the watcher fires after file changes
+      throw new Error('no tests written')
     }
 
-    watcher.on('event', spy)
-
-    watcher.on('event', event => {
-      try {
-        switch (event.code) {
-          case 'START':
-          case 'BUNDLE_START':
-          case 'BUNDLE_END':
-          case 'ERROR':
-            break
-
-          case 'END':
-            expectations(event)
-            done()
-            break
-
-          case 'FATAL':
-            throw new Error(event.code)
-        }
-      } catch (error) {
-        done.fail(error)
-      }
-    })
+    setupWatcher({ expects, config, done, spy })
   })
 })
+
+function setupWatcher({ expects, config, done, spy }) {
+  const watcher = watch(config)
+
+  watcher.on('event', spy)
+  watcher.on('event', event => {
+    try {
+      switch (event.code) {
+        case 'START':
+        case 'BUNDLE_START':
+        case 'BUNDLE_END':
+        case 'ERROR':
+          break
+
+        case 'END':
+          expects(event)
+          watcher.close()
+          done()
+          break
+
+        case 'FATAL':
+          throw new Error(event.code)
+      }
+    } catch (error) {
+      watcher.close()
+      done.fail(error)
+    }
+  })
+}
