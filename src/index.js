@@ -6,9 +6,10 @@ import generateCode from './generateCode'
 function codeString({
   include = '**/*.code.js',
   exclude,
-  plugins,
+  plugins = [],
   output = {
     format: 'iife',
+    // exports: 'none'
   },
 } = {}) {
   const filter = createFilter(include, exclude)
@@ -16,11 +17,15 @@ function codeString({
   return {
     name: 'code-string',
 
+    // Try the load hook instead
+    // https://rollupjs.org/guide/en#load
     async transform(_, id) {
-      if (filter(id)) {
+      if (!filter(id)) return null
+
+      try {
         const bundle = await rollup({
           input: id,
-          plugins,
+          plugins: plugins,
         })
 
         const code = await generateCode(bundle, {
@@ -36,6 +41,8 @@ function codeString({
           code: `export default ${JSON.stringify(code)};`,
           map: { mappings: '' },
         }
+      } catch (error) {
+        console.error(error)
       }
     },
   }
