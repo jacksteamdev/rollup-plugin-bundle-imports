@@ -93,7 +93,9 @@ describe('watch', () => {
   test('runs again after file change', done => {
     const spy = jest.fn()
 
-    const expectations = () => {}
+    const expectations = () => {
+      throw 'no tests written'
+    }
 
     watcher.on('event', spy)
 
