@@ -25,7 +25,7 @@ function codeString({
       try {
         const bundle = await rollup({
           input: id,
-          // Should exclude the current module
+          // Should exclude the current module in recursive bundles
           plugins: [...plugins, codeString({ exclude: id })],
         })
 

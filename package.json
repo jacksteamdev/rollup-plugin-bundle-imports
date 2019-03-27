@@ -2,17 +2,14 @@
   "name": "rollup-plugin-code-string",
   "version": "0.1.0",
   "description": "Import javascript modules as strings.",
+  "repository": "bumble-org/rollup-plugin-code-string",
+  "license": "MIT",
+  "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
+  "files": [
+    "build"
+  ],
   "main": "build/bundle-cjs.js",
   "module": "build/bundle-esm.js",
-  "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@sucrase/jest-plugin": "^2.0.0",
-    "dedupe": "^3.0.1",
-    "eslint": "^5.11.0",
-    "jest": "^24.1.0",
-    "sucrase": "^3.9.5"
-  },
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
@@ -21,24 +18,28 @@
     "postversion": "git push && npm publish"
   },
   "jest": {
-    "transform": {
-      ".(js|jsx|ts|tsx)": "@sucrase/jest-plugin"
-    },
-    "setupFilesAfterEnv": [
-      "./tests/jest.setup.js"
-    ],
+    "clearMocks": true,
     "modulePathIgnorePatterns": [
       "fixtures/dest"
     ],
-    "clearMocks": true
+    "setupFilesAfterEnv": [
+      "./tests/jest.setup.js"
+    ],
+    "transform": {
+      ".(js|jsx|ts|tsx)": "@sucrase/jest-plugin"
+    }
   },
-  "files": [
-    "build"
-  ],
   "dependencies": {
     "rollup": "^1.6.0",
     "rollup-plugin-commonjs": "^9.2.1",
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-pluginutils": "^2.4.1"
+  },
+  "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
+    "dedupe": "^3.0.1",
+    "eslint": "^5.11.0",
+    "jest": "^24.1.0",
+    "sucrase": "^3.9.5"
   }
 }

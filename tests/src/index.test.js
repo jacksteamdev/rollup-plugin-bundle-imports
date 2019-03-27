@@ -1,22 +1,22 @@
 import { rollup, watch } from 'rollup'
 import generateCode from '../../src/generateCode'
-import config1 from '../fixtures/basic/rollup.config'
+import basicConfig from '../fixtures/basic/rollup.config'
 import config2 from '../fixtures/modules/rollup.config'
 import config3 from '../fixtures/advanced/rollup.config'
 
 describe('build', () => {
   test('returns a string', async () => {
-    const bundle = await rollup(config1)
+    const bundle = await rollup(basicConfig)
 
-    const code = await generateCode(bundle, config1)
+    const code = await generateCode(bundle, basicConfig)
 
     expect(typeof code).toBe('string')
   })
 
   test('bundles all imports', async () => {
-    const bundle = await rollup(config1)
+    const bundle = await rollup(basicConfig)
 
-    const code = await generateCode(bundle, config1)
+    const code = await generateCode(bundle, basicConfig)
 
     expect(code).toContain('const add')
     expect(code).toContain('const b')
@@ -49,7 +49,7 @@ describe('build', () => {
 describe('watch', () => {
   test('basic config watch', done => {
     const spy = jest.fn()
-    const config = config1
+    const config = basicConfig
 
     const expects = () => {
       // Expect watcher not to error
@@ -83,7 +83,7 @@ describe('watch', () => {
 
   test('basic config watch with changes', done => {
     const spy = jest.fn()
-    const config = config1
+    const config = basicConfig
 
     const expects = () => {
       // Test that the watcher fires after file changes
