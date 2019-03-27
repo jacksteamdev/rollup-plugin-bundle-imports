@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-code-string",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Import javascript modules as strings.",
   "repository": "bumble-org/rollup-plugin-code-string",
   "license": "MIT",
