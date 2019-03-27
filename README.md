@@ -12,10 +12,10 @@ npm i rollup-plugin-code-string -D
 
 ```js
 import { rollup } from 'rollup'
-import x from 'rollup-plugin-code-string'
+import code from 'rollup-plugin-code-string'
 
 rollup({
   entry: 'main.js',
-  plugins: [x()]
+  plugins: [code()]
 })
 ```

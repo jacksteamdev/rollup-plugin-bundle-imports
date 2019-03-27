@@ -7,7 +7,7 @@ import generateCode from './generateCode'
 
 function codeString({
   include = ['**/*.code.js'],
-  exclude,
+  exclude = [],
   plugins = [resolve(), commonjs()],
   output = {
     format: 'iife',
@@ -15,6 +15,10 @@ function codeString({
   },
 } = {}) {
   const filter = createFilter(include, exclude)
+
+  // Convert to arrays
+  exclude = [].concat(exclude)
+  include = [].concat(include)
 
   return {
     name: 'code-string',
@@ -26,7 +30,10 @@ function codeString({
         const bundle = await rollup({
           input: id,
           // Should exclude the current module in recursive bundles
-          plugins: [...plugins, codeString({ exclude: id })],
+          plugins: [
+            ...plugins,
+            codeString({ exclude: exclude.concat(id) }),
+          ],
         })
 
         const code = await generateCode(bundle, {
