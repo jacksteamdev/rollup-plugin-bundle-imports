@@ -1,8 +1,8 @@
 {
-  "name": "rollup-plugin-code-string",
+  "name": "rollup-plugin-bundle-import",
   "version": "0.1.1",
-  "description": "Import javascript modules as strings.",
-  "repository": "bumble-org/rollup-plugin-code-string",
+  "description": "Bundle an import separately and get the use the result in your code.",
+  "repository": "bumble-org/rollup-plugin-bundle-import",
   "license": "MIT",
   "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
   "files": [
@@ -33,13 +33,13 @@
     "rollup": "^1.10.1",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.3",
-    "rollup-pluginutils": "^2.4.1"
+    "rollup-pluginutils": "^2.6.0"
   },
   "devDependencies": {
     "@sucrase/jest-plugin": "^2.0.0",
     "dedupe": "^3.0.1",
-    "eslint": "^5.11.0",
-    "jest": "^24.1.0",
-    "sucrase": "^3.9.5"
+    "eslint": "^5.16.0",
+    "jest": "^24.7.1",
+    "sucrase": "^3.10.1"
   }
 }
