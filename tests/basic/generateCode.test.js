@@ -2,7 +2,7 @@ import { rollup } from 'rollup'
 import generateCode from '../../src/generateCode'
 
 test('generateCode', async () => {
-  const input = 'tests/fixtures/basic/message.js'
+  const input = 'tests/basic/fixtures/message.js'
   const output = { format: 'esm' }
 
   const bundle = await rollup({ input })
