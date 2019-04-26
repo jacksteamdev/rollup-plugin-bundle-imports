@@ -2,24 +2,52 @@ import { createFilter } from 'rollup-pluginutils'
 import { rollup } from 'rollup'
 import path from 'path'
 
+import commonjs from 'rollup-plugin-commonjs'
+import resolve from 'rollup-plugin-node-resolve'
+
 import generateCode from './generateCode'
 
 const pluginName = 'bundle-import'
-let count = 0
+const pluginCache = new Map()
 
-function bundleImport({
-  include,
-  exclude,
-  importAs,
-  options: {
-    plugins,
-    output = {
-      format: 'esm',
-      preferConst: true,
+function bundleImports(
+  {
+    include,
+    exclude,
+    importAs,
+    options: {
+      plugins,
+      output = {
+        format: 'esm',
+        preferConst: true,
+      },
+    } = {},
+    ...inputOptions
+  } = {
+    include: ['**/*.code.js'],
+    importAs: 'code',
+    options: {
+      plugins: [resolve(), commonjs()],
+      output: {
+        format: 'iife',
+        preferConst: true,
+      },
     },
-  } = {},
-  ...inputOptions
-} = {}) {
+  },
+) {
+  const _id = JSON.stringify({
+    include,
+    exclude,
+    importAs,
+    plugins,
+    output,
+    inputOptions,
+  })
+
+  if (pluginCache.has(_id)) {
+    return pluginCache.get(_id)
+  }
+
   if (!include) {
     throw new TypeError('options.include must be defined.')
   }
@@ -41,10 +69,9 @@ function bundleImport({
 
   // Handle multiple plugin instances
   // TODO: Limit plugin duplication during recursion
-  const name = `${pluginName}-${count}`
-  count++
+  const name = `${pluginName}-${pluginCache.size}`
 
-  return {
+  const pluginInstance = {
     name,
 
     options({ plugins: p }) {
@@ -59,7 +86,7 @@ function bundleImport({
         input: id,
         // Should exclude the current module in recursive bundles
         plugins: _plugins.concat(
-          bundleImport({
+          bundleImports({
             include: _include,
             exclude: _exclude.concat(id),
             importAs,
@@ -110,6 +137,10 @@ function bundleImport({
       // }
     },
   }
+
+  pluginCache.set(_id, pluginInstance)
+
+  return pluginInstance
 }
 
-export default bundleImport
+export default bundleImports

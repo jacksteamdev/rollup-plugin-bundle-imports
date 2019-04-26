@@ -1,8 +1,8 @@
 /* eslint-env node */
 
-import bundleImport from '../../../src/index'
+import bundleImports from '../../../src/index'
 
-const bundleImportSpy = bundleImport({
+const bundleImportSpy = bundleImports({
   include: ['**/*.code.js'],
   importAs: 'code',
 })

@@ -1,8 +1,8 @@
 {
-  "name": "rollup-plugin-bundle-import",
+  "name": "rollup-plugin-bundle-imports",
   "version": "0.1.1",
-  "description": "Bundle an import separately and get the use the result in your code.",
-  "repository": "bumble-org/rollup-plugin-bundle-import",
+  "description": "Bundle imports separately and use the result in your code.",
+  "repository": "bumble-org/rollup-plugin-bundle-imports",
   "license": "MIT",
   "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
   "files": [

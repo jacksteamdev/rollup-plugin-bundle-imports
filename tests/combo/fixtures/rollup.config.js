@@ -1,13 +1,13 @@
 /* eslint-env node */
 
-import bundleImport from '../../../src/index'
+import bundleImports from '../../../src/index'
 
-const codeImport = bundleImport({
+const codeImport = bundleImports({
   include: ['**/injected.js'],
   importAs: 'code',
 })
 
-const pathImport = bundleImport({
+const pathImport = bundleImports({
   include: ['**/content.js'],
   importAs: 'path',
 })

@@ -1,11 +1,13 @@
-# rollup-plugin-bundle-import
+# rollup-plugin-bundle-imports
 
-Bundle an import separately and use the result in your code.
+### [Previously `rollup-plugin-code-string`](https://github.com/bumble-org/rollup-plugin-bundle-imports#migration)
+
+Bundle imports separately and use the result in your code.
 
 ## Installation
 
 ```sh
-npm i rollup-plugin-bundle-import -D
+npm i rollup-plugin-bundle-imports -D
 ```
 
 ## Usage
@@ -16,10 +18,10 @@ npm i rollup-plugin-bundle-import -D
 
 ```js
 import { rollup } from 'rollup'
-import bundle from 'rollup-plugin-bundle-import'
+import bundle from 'rollup-plugin-bundle-imports'
 
 rollup({
-  entry: 'register-service-worker.js',
+  input: 'register-service-worker.js',
   plugins: [
     bundle({
       include: ['**/my-sw.js'],
@@ -49,7 +51,7 @@ import { rollup } from 'rollup'
 import bundle from 'rollup-plugin-bundle-import'
 
 rollup({
-  entry: 'background.js',
+  input: 'background.js',
   plugins: [
     bundle({
       include: ['**/content.js', '**/inject.js'],
@@ -83,4 +85,36 @@ script.text = code
 
 document.head.append(script)
 script.remove()
+```
+
+# Migration from `rollup-plugin-code-string`
+
+The API has become more robust, but the defaults will work the same!
+
+```js
+import { rollup } from 'rollup'
+import bundle from 'rollup-plugin-bundle-import'
+
+rollup({
+  input: 'background.js',
+  plugins: [bundle()],
+})
+
+// This is the same as using the defaults
+rollup({
+  input: 'background.js',
+  plugins: [
+    bundle({
+      include: ['**/*.code.js'],
+      importAs: 'code',
+      options: {
+        plugins: [resolve(), commonjs()],
+        output: {
+          format: 'iife',
+          preferConst: true,
+        },
+      },
+    }),
+  ],
+})
 ```
