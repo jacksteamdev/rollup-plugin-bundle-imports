@@ -4,7 +4,8 @@ import path from 'path'
 
 import generateCode from './generateCode'
 
-const name = 'bundle-import'
+const pluginName = 'bundle-import'
+let count = 0
 
 function bundleImport({
   include,
@@ -37,6 +38,11 @@ function bundleImport({
   const _include = [].concat(include)
   const _exclude = exclude ? [].concat(exclude) : []
   let _plugins = []
+
+  // Handle multiple plugin instances
+  // TODO: Limit plugin duplication during recursion
+  const name = `${pluginName}-${count}`
+  count++
 
   return {
     name,

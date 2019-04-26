@@ -3,8 +3,8 @@
 import bundleImport from '../../../src/index'
 
 const bundleImportSpy = bundleImport({
-  include: ['**/*.code.js'],
-  importAs: 'code',
+  include: ['**/*sw.js'],
+  importAs: 'path',
 })
 
 // Mock plugin hooks if in jest
@@ -16,10 +16,10 @@ if (process.env.NODE_ENV === 'test') {
 const plugins = [bundleImportSpy]
 
 export default {
-  input: 'tests/advanced/fixtures/background.js',
+  input: 'tests/sw/fixtures/index.js',
   output: {
-    file: 'tests/advanced/dest/background.js',
-    format: 'iife',
+    file: 'tests/sw/dest/index-esm.js',
+    format: 'esm',
     preferConst: true,
   },
   plugins,
