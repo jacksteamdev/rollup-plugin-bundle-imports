@@ -1,16 +1,16 @@
 # rollup-plugin-bundle-imports
 
-### [Previously `rollup-plugin-code-string`](https://github.com/bumble-org/rollup-plugin-bundle-imports#migration)
+Bundle imports separately and use the result as [a file path](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-service-worker) or [a string of code](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-web-extension-content-script). Tested to work [recursively](https://github.com/bumble-org/rollup-plugin-bundle-imports#recursive-usage) or as multiple plugins with different options.
 
-Bundle imports separately and use the result in your code.
+If you are coming here from [`rollup-plugin-code-string`](https://www.npmjs.com/package/rollup-plugin-code-string), the API has become more robust, [but the defaults will work the same!](https://github.com/bumble-org/rollup-plugin-bundle-imports#default-settings)
 
-## Installation
+# Installation
 
 ```sh
 npm i rollup-plugin-bundle-imports -D
 ```
 
-## Usage
+# Usage
 
 ## Bundle a service worker
 
@@ -18,12 +18,12 @@ npm i rollup-plugin-bundle-imports -D
 
 ```js
 import { rollup } from 'rollup'
-import bundle from 'rollup-plugin-bundle-imports'
+import bundleImports from 'rollup-plugin-bundle-imports'
 
 rollup({
   input: 'register-service-worker.js',
   plugins: [
-    bundle({
+    bundleImports({
       include: ['**/my-sw.js'],
       // Import as path to bundle
       importAs: 'path',
@@ -48,7 +48,7 @@ Bundle a content script to a code string to inject from the background page of a
 
 ```js
 import { rollup } from 'rollup'
-import bundle from 'rollup-plugin-bundle-import'
+import bundle from 'rollup-plugin-bundle-imports'
 
 rollup({
   input: 'background.js',
@@ -87,13 +87,11 @@ document.head.append(script)
 script.remove()
 ```
 
-# Migration from `rollup-plugin-code-string`
-
-The API has become more robust, but the defaults will work the same!
+# Default Settings
 
 ```js
 import { rollup } from 'rollup'
-import bundle from 'rollup-plugin-bundle-import'
+import bundle from 'rollup-plugin-bundle-imports'
 
 rollup({
   input: 'background.js',
