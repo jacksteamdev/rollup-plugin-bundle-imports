@@ -69,19 +69,26 @@ function bundleImports(
 
   // Handle multiple plugin instances
   // TODO: Limit plugin duplication during recursion
+  // TODO: use nanoid to differentiate between plugins
   const name = `${pluginName}-${pluginCache.size}`
 
   const pluginInstance = {
     name,
 
     options({ plugins: p }) {
-      _plugins = plugins || p.filter(({ name: n }) => n !== name)
+      const _p = p.filter(({ name: n }) => n !== name)
+
+      _plugins = plugins
+        ? plugins.concat(
+            // Include other bundleImports instances
+            _p.filter(({ name: n }) => n.startsWith(pluginName)),
+          )
+        : _p
     },
 
     async load(id) {
       if (!filter(id)) return null
 
-      // try {
       const bundle = await rollup({
         input: id,
         // Should exclude the current module in recursive bundles
@@ -100,7 +107,7 @@ function bundleImports(
         ...inputOptions,
       })
 
-      bundle.watchFiles.forEach(file => {
+      bundle.watchFiles.forEach((file) => {
         this.addWatchFile(file)
       })
 
@@ -132,9 +139,6 @@ function bundleImports(
           )
         }
       }
-      // } catch (error) {
-      //   this.error(error)
-      // }
     },
   }
 
