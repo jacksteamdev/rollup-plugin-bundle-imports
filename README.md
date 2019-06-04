@@ -14,6 +14,8 @@ npm i rollup-plugin-bundle-imports -D
 
 ## Bundle a service worker
 
+Bundle an imported file and emit it as an asset. The imported value will be the file path to the asset.
+
 `rollup.config.js`:
 
 ```js
@@ -35,9 +37,9 @@ rollup({
 `register-service-worker.js`:
 
 ```js
-import sw from './my-sw.js'
+import swPath from './my-sw.js'
 
-navigator.serviceWorker.register(sw)
+navigator.serviceWorker.register(swPath)
 ```
 
 ## Bundle a Web Extension content script
@@ -48,12 +50,12 @@ Bundle a content script to a code string to inject from the background page of a
 
 ```js
 import { rollup } from 'rollup'
-import bundle from 'rollup-plugin-bundle-imports'
+import bundleImports from 'rollup-plugin-bundle-imports'
 
 rollup({
   input: 'background.js',
   plugins: [
-    bundle({
+    bundleImports({
       include: ['**/content.js', '**/inject.js'],
       // Import as code string to bundle
       importAs: 'code',
@@ -87,7 +89,36 @@ document.head.append(script)
 script.remove()
 ```
 
-# Default Settings
+## Import both code and paths
+
+If you want to import some files as code and others as file paths, just create two plugins with different settings!
+
+Both plugin instances will work recursively with each other, so you can import a path into a code string, or import a code string into an asset and import the asset path into your entry bundle.
+
+`rollup.config.js`:
+
+```js
+import { rollup } from 'rollup'
+import bundleImports from 'rollup-plugin-bundle-imports'
+
+rollup({
+  input: 'register-service-worker.js',
+  plugins: [
+    bundleImports({
+      include: ['**/my-sw.js'],
+      // Import as path to bundle
+      importAs: 'path',
+    }),
+    bundleImports({
+      include: ['**/content.js', '**/inject.js'],
+      // Import as code string to bundle
+      importAs: 'code',
+    }),
+  ],
+})
+```
+
+## Default Settings
 
 ```js
 import { rollup } from 'rollup'
