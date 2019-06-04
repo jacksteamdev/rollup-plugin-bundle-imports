@@ -30,16 +30,16 @@
     }
   },
   "dependencies": {
-    "rollup": "^1.10.1",
+    "rollup": "^1.13.1",
     "rollup-plugin-commonjs": "^9.3.4",
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "rollup-pluginutils": "^2.6.0"
+    "rollup-plugin-node-resolve": "^4.2.4",
+    "rollup-pluginutils": "^2.8.1"
   },
   "devDependencies": {
     "@sucrase/jest-plugin": "^2.0.0",
     "dedupe": "^3.0.1",
     "eslint": "^5.16.0",
-    "jest": "^24.7.1",
+    "jest": "^24.8.0",
     "sucrase": "^3.10.1"
   }
 }
