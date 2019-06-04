@@ -19,10 +19,9 @@ Bundle an imported file and emit it as an asset. The imported value will be the 
 `rollup.config.js`:
 
 ```js
-import { rollup } from 'rollup'
 import bundleImports from 'rollup-plugin-bundle-imports'
 
-rollup({
+export default {
   input: 'register-service-worker.js',
   plugins: [
     bundleImports({
@@ -31,7 +30,7 @@ rollup({
       importAs: 'path',
     }),
   ],
-})
+}
 ```
 
 `register-service-worker.js`:
@@ -49,10 +48,9 @@ Bundle a content script to a code string to inject from the background page of a
 `rollup.config.js`
 
 ```js
-import { rollup } from 'rollup'
 import bundleImports from 'rollup-plugin-bundle-imports'
 
-rollup({
+export default {
   input: 'background.js',
   plugins: [
     bundleImports({
@@ -61,7 +59,7 @@ rollup({
       importAs: 'code',
     }),
   ],
-})
+}
 ```
 
 `background.js`
@@ -98,11 +96,10 @@ Both plugin instances will work recursively with each other, so you can import a
 `rollup.config.js`:
 
 ```js
-import { rollup } from 'rollup'
 import bundleImports from 'rollup-plugin-bundle-imports'
 
-rollup({
-  input: 'register-service-worker.js',
+export default {
+  input: 'index.js',
   plugins: [
     bundleImports({
       include: ['**/my-sw.js'],
@@ -115,7 +112,7 @@ rollup({
       importAs: 'code',
     }),
   ],
-})
+}
 ```
 
 ## Default Settings
