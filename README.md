@@ -38,14 +38,15 @@ If you are coming here from [`rollup-plugin-code-string`](https://www.npmjs.com/
 
 - [Getting Started](#getting_started)
 - [Usage](#usage)
-  - [Bundle a service worker](#usage-sw)
-  - [Bundle a Chrome extension content script](#usage-script)
+  - [Bundle A Service Worker](#usage-sw)
+  - [Bundle A Chrome Extension Content Script](#usage-script)
   - [Recursive Usage](#usage-recursive)
+  - [Import As Both Code and Paths](#usage-import-as-both)
 - [Features](#features)
   - [Works With TypeScript](#typescript)
 - [Options API](#options-api)
 
-## Getting started <a name = "getting_started"></a>
+## Getting Started <a name = "getting_started"></a>
 
 This is a Rollup plugin, so your project will need to be up and running with [Rollup](https://rollupjs.org/guide/en/).
 
@@ -78,7 +79,7 @@ Default is to import a module that ends in `.code.js` as a string.
 import code from './script.code.js'
 ```
 
-### Bundle a service worker <a name = "usage-sw"></a>
+### Bundle A Service Worker <a name = "usage-sw"></a>
 
 Use `options.importAs` to bundle an imported module and emit it as an asset file. The imported value will be the file path to the asset.
 
@@ -107,7 +108,7 @@ import swPath from './my-sw.js'
 navigator.serviceWorker.register(swPath)
 ```
 
-### Bundle a Chrome extension content script <a name = "usage-script"></a>
+### Bundle A Chrome Extension Content Script <a name = "usage-script"></a>
 
 Bundle a content script to a code string to inject from the background page of a Web or Chrome extension.
 
@@ -153,7 +154,7 @@ document.head.append(script)
 script.remove()
 ```
 
-### Import both code and paths
+### Import As Both Code And Paths <a name = "usage-import-as-both"></a>
 
 If you want to import some files as code and others as file paths, just create two plugins with different settings!
 
