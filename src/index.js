@@ -10,7 +10,7 @@ import generateCode from './generateCode'
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
-function bundleImports({
+export function bundleImports({
   include = ['**/*.code.js', '**/*.code.ts'],
   exclude,
   importAs = 'code',
@@ -20,16 +20,16 @@ function bundleImports({
       format: 'iife',
       preferConst: true,
     },
+    ...inputOptions
   } = {},
-  ...inputOptions
 } = {}) {
   const _id = JSON.stringify({
     include,
     exclude,
     importAs,
     plugins,
-    output,
     inputOptions,
+    output,
   })
 
   if (pluginCache.has(_id)) {
@@ -97,8 +97,8 @@ function bundleImports({
             importAs,
             options: {
               plugins: _plugins,
-              output,
               ...inputOptions,
+              output,
             },
           }),
         ),
@@ -144,5 +144,3 @@ function bundleImports({
 
   return pluginInstance
 }
-
-export default bundleImports

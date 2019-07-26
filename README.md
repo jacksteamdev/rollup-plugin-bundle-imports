@@ -61,7 +61,7 @@ $ npm i rollup-plugin-bundle-imports -D
 ```js
 // rollup.config.js
 
-import bundleImports from 'rollup-plugin-bundle-imports'
+import { bundleImports } from 'rollup-plugin-bundle-imports'
 
 export default {
   input: 'index.js',
@@ -86,7 +86,7 @@ Use `options.importAs` to bundle an imported module and emit it as an asset file
 ```js
 // rollup.config.js
 
-import bundleImports from 'rollup-plugin-bundle-imports'
+import { bundleImports } from 'rollup-plugin-bundle-imports'
 
 export default {
   input: 'register-service-worker.js',
@@ -163,7 +163,7 @@ Both plugin instances will work recursively with each other, so you can import a
 ```js
 // rollup.config.js
 
-import bundleImports from 'rollup-plugin-bundle-imports'
+import { bundleImports } from 'rollup-plugin-bundle-imports'
 
 export default {
   input: 'index.js',

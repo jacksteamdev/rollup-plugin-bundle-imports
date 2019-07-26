@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-import bundleImports from '../../../src/index'
+import { bundleImports } from '../../../src/index'
 
 const bundleImportSpy = bundleImports({
   include: ['**/*sw.js'],
