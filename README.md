@@ -30,9 +30,9 @@ IMG_URL
 
 ---
 
-Bundle imports separately and use the result as [a file path](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-service-worker) or [a string of code](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-web-extension-content-script). Tested to work [recursively](https://github.com/bumble-org/rollup-plugin-bundle-imports#recursive-usage) or as multiple plugin instances with different options.
+Bundle imports separately and use the result as [a file path](#usage-sw) or [a string of code](https://github.com/bumble-org/rollup-plugin-bundle-imports#usage-script). Tested to work [recursively](https://github.com/bumble-org/rollup-plugin-bundle-imports#usage-recursive) or as multiple plugin instances with different options.
 
-If you are coming here from [`rollup-plugin-code-string`](https://www.npmjs.com/package/rollup-plugin-code-string), the API has become more robust, [but the defaults will work the same!](https://github.com/bumble-org/rollup-plugin-bundle-imports#default-settings)
+If you are coming here from [`rollup-plugin-code-string`](https://www.npmjs.com/package/rollup-plugin-code-string), the API has become more robust, [but the defaults will work the same!](https://github.com/bumble-org/rollup-plugin-bundle-imports#options-defaults)
 
 ## Table of Contents
 
@@ -261,7 +261,7 @@ bundleImports({
 })
 ```
 
-### Default options
+### Default options <a name = "options-defaults"></a>
 
 ```js
 // rollup.config.js
