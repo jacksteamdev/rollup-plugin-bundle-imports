@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-import bundleImports from '../../../src/index'
+import { bundleImports } from '../../../src/index'
 
 const codeImport = bundleImports({
   include: ['**/*-code.js'],

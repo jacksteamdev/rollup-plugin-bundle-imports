@@ -10,38 +10,26 @@ import generateCode from './generateCode'
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
-function bundleImports(
-  {
-    include,
-    exclude,
-    importAs,
-    options: {
-      plugins,
-      output = {
-        format: 'esm',
-        preferConst: true,
-      },
-    } = {},
-    ...inputOptions
-  } = {
-    include: ['**/*.code.js'],
-    importAs: 'code',
-    options: {
-      plugins: [resolve(), commonjs()],
-      output: {
-        format: 'iife',
-        preferConst: true,
-      },
+export function bundleImports({
+  include = ['**/*.code.js', '**/*.code.ts'],
+  exclude,
+  importAs = 'code',
+  options: {
+    plugins = [resolve(), commonjs()],
+    output = {
+      format: 'iife',
+      preferConst: true,
     },
-  },
-) {
+    ...inputOptions
+  } = {},
+} = {}) {
   const _id = JSON.stringify({
     include,
     exclude,
     importAs,
     plugins,
-    output,
     inputOptions,
+    output,
   })
 
   if (pluginCache.has(_id)) {
@@ -56,9 +44,19 @@ function bundleImports(
     throw new TypeError('options.importAs must be defined.')
   }
 
+  if (!output) {
+    throw new TypeError('options.options.output must be defined')
+  }
+
   if (!output.format) {
     throw new TypeError('options.options.format must be defined')
   }
+
+  // if (importAs === 'path' && output.format !== 'esm') {
+  //   throw new Error(
+  //     'importing a bundle as a path is only compatible with esm format',
+  //   )
+  // }
 
   const filter = createFilter(include, exclude)
 
@@ -99,8 +97,8 @@ function bundleImports(
             importAs,
             options: {
               plugins: _plugins,
-              output,
               ...inputOptions,
+              output,
             },
           }),
         ),
@@ -146,5 +144,3 @@ function bundleImports(
 
   return pluginInstance
 }
-
-export default bundleImports

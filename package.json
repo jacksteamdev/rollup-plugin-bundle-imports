@@ -1,15 +1,16 @@
 {
   "name": "rollup-plugin-bundle-imports",
-  "version": "0.2.1",
-  "description": "Bundle imports separately and use the result in your code.",
+  "version": "1.0.2",
+  "description": "Bundle imports separately and use the result as a file path or a string of code.",
   "repository": "bumble-org/rollup-plugin-bundle-imports",
   "license": "MIT",
   "author": "Jack and Amy Steam <jacksteamdev@gmail.com>",
   "files": [
-    "build"
+    "lib",
+    "index.d.ts"
   ],
-  "main": "build/bundle-cjs.js",
-  "module": "build/bundle-esm.js",
+  "main": "lib/bundle-imports-cjs.js",
+  "module": "lib/bundle-imports-esm.js",
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
@@ -30,7 +31,7 @@
     }
   },
   "dependencies": {
-    "rollup": "^1.13.1",
+    "rollup": "^1.17.0",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.4",
     "rollup-pluginutils": "^2.8.1"
@@ -41,5 +42,6 @@
     "eslint": "^5.16.0",
     "jest": "^24.8.0",
     "sucrase": "^3.10.1"
-  }
+  },
+  "types": "index.d.ts"
 }
