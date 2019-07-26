@@ -31,7 +31,7 @@
     }
   },
   "dependencies": {
-    "rollup": "^1.13.1",
+    "rollup": "^1.17.0",
     "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-node-resolve": "^4.2.4",
     "rollup-pluginutils": "^2.8.1"
