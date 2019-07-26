@@ -1,4 +1,68 @@
-# rollup-plugin-bundle-imports
+<!--
+Template tags: 
+bumble-org
+rollup-plugin-bundle-imports
+IMG_URL
+-->
+
+<p align="center">
+  <a href="https://github.com/bumble-org/rollup-plugin-bundle-imports" rel="noopener">
+  <img width=200px height=200px src="IMG_URL" alt="rollup-plugin-bundle-imports logo"></a>
+</p>
+
+<h3 align="center">rollup-plugin-bundle-imports</h3>
+
+
+<div align="center">
+
+[![npm (scoped)](https://img.shields.io/npm/v/rollup-plugin-bundle-imports.svg)](https://www.npmjs.com/package/${}/rollup-plugin-bundle-imports)
+[![GitHub last commit](https://img.shields.io/github/last-commit/bumble-org/rollup-plugin-bundle-imports.svg)](https://github.com/bumble-org/rollup-plugin-bundle-imports)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+[![TypeScript Declarations Included](https://img.shields.io/badge/types-TypeScript-informational)](#typescript)
+
+</div>
+
+<div align="center">
+
+[![Fiverr: We make Chrome extensions](https://img.shields.io/badge/Fiverr%20-We%20make%20Chrome%20extensions-brightgreen.svg)](https://www.fiverr.com/jacksteam)
+[![ko-fi](https://img.shields.io/badge/ko--fi-Buy%20me%20a%20coffee-ff5d5b)](https://ko-fi.com/K3K1QNTF)
+
+</div>
+
+---
+
+Someting about the library.
+
+## Table of Contents
+
+- [Getting Started](#getting_started)
+- [Usage](#usage)
+- [Features](#features)
+
+## Getting started <a name = "getting_started"></a>
+
+You will need to use a bundler like [Rollup](https://rollupjs.org/guide/en/) or Webpack to include this library in the build of Chrome extension. 
+
+See [`rollup-plugin-chrome-extension`](https://github.com/@bumble/rollup-plugin-chrome-extension) for an easy way use Rollup to build your Chrome extension!
+
+### Installation
+
+```sh
+$ npm i rollup-plugin-bundle-imports
+```
+
+## Usage <a name = "usage"></a>
+
+```javascript
+// Usage example
+```
+
+## Features <a name = "features"></a>
+
+### TypeScript Definitions <a name = "typescript"></a>
+
+TypeScript definitions are included, so no need to install an additional `@types` library!
+
 
 Bundle imports separately and use the result as [a file path](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-service-worker) or [a string of code](https://github.com/bumble-org/rollup-plugin-bundle-imports#bundle-a-web-extension-content-script). Tested to work [recursively](https://github.com/bumble-org/rollup-plugin-bundle-imports#recursive-usage) or as multiple plugins with different options.
 
