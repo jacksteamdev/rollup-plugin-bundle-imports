@@ -15,13 +15,7 @@ function bundleImports(
     include,
     exclude,
     importAs,
-    options: {
-      plugins,
-      output = {
-        format: 'esm',
-        preferConst: true,
-      },
-    } = {},
+    options: { plugins, output } = {},
     ...inputOptions
   } = {
     include: ['**/*.code.js'],
@@ -56,8 +50,18 @@ function bundleImports(
     throw new TypeError('options.importAs must be defined.')
   }
 
+  if (!output) {
+    throw new TypeError('options.options must be defined')
+  }
+
   if (!output.format) {
     throw new TypeError('options.options.format must be defined')
+  }
+
+  if (importAs === 'path' && output.format !== 'esm') {
+    throw new Error(
+      'importing a bundle as a path is only compatible with esm format',
+    )
   }
 
   const filter = createFilter(include, exclude)
