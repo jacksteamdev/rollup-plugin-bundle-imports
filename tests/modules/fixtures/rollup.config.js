@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-import bundleImports from '../../../src/index'
+import { bundleImports } from '../../../src/index'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 

@@ -10,32 +10,27 @@ import generateCode from './generateCode'
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
-function bundleImports(
-  {
-    include,
-    exclude,
-    importAs,
-    options: { plugins, output } = {},
-    ...inputOptions
-  } = {
-    include: ['**/*.code.js'],
-    importAs: 'code',
-    options: {
-      plugins: [resolve(), commonjs()],
-      output: {
-        format: 'iife',
-        preferConst: true,
-      },
+export default bundleImports
+export function bundleImports({
+  include = ['**/*.code.js', '**/*.code.ts'],
+  exclude,
+  importAs = 'code',
+  options: {
+    plugins = [resolve(), commonjs()],
+    output = {
+      format: 'iife',
+      preferConst: true,
     },
-  },
-) {
+    ...inputOptions
+  } = {},
+} = {}) {
   const _id = JSON.stringify({
     include,
     exclude,
     importAs,
     plugins,
-    output,
     inputOptions,
+    output,
   })
 
   if (pluginCache.has(_id)) {
@@ -51,18 +46,18 @@ function bundleImports(
   }
 
   if (!output) {
-    throw new TypeError('options.options must be defined')
+    throw new TypeError('options.options.output must be defined')
   }
 
   if (!output.format) {
     throw new TypeError('options.options.format must be defined')
   }
 
-  if (importAs === 'path' && output.format !== 'esm') {
-    throw new Error(
-      'importing a bundle as a path is only compatible with esm format',
-    )
-  }
+  // if (importAs === 'path' && output.format !== 'esm') {
+  //   throw new Error(
+  //     'importing a bundle as a path is only compatible with esm format',
+  //   )
+  // }
 
   const filter = createFilter(include, exclude)
 
@@ -80,7 +75,10 @@ function bundleImports(
     name,
 
     options({ plugins: p }) {
-      const _p = p.filter(({ name: n }) => n !== name)
+      const _p = p
+        // TODO: test does not crash when plugins array includes falsy values
+        // .filter((p) => typeof p === 'object')
+        .filter(({ name: n }) => n !== name)
 
       _plugins = plugins
         ? plugins.concat(
@@ -103,8 +101,8 @@ function bundleImports(
             importAs,
             options: {
               plugins: _plugins,
-              output,
               ...inputOptions,
+              output,
             },
           }),
         ),
@@ -150,5 +148,3 @@ function bundleImports(
 
   return pluginInstance
 }
-
-export default bundleImports
