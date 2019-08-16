@@ -77,7 +77,7 @@ export function bundleImports({
     options({ plugins: p }) {
       const _p = p
         // TODO: test does not crash when plugins array includes falsy values
-        // .filter((p) => typeof p === 'object')
+        .filter((p) => typeof p === 'object')
         .filter(({ name: n }) => n !== name)
 
       _plugins = plugins
