@@ -10,6 +10,7 @@ import generateCode from './generateCode'
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
+export default bundleImports
 export function bundleImports({
   include = ['**/*.code.js', '**/*.code.ts'],
   exclude,
@@ -74,7 +75,10 @@ export function bundleImports({
     name,
 
     options({ plugins: p }) {
-      const _p = p.filter(({ name: n }) => n !== name)
+      const _p = p
+        // TODO: test does not crash when plugins array includes falsy values
+        // .filter((p) => typeof p === 'object')
+        .filter(({ name: n }) => n !== name)
 
       _plugins = plugins
         ? plugins.concat(
