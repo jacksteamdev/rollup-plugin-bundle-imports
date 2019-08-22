@@ -10,7 +10,7 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
-    quotes: ['warn', 'single'],
-    semi: ['warn', 'never'],
+    quotes: 'off',
+    semi: 'off',
   },
 }

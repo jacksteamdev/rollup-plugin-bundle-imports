@@ -41,6 +41,7 @@
     "rollup-pluginutils": "^2.8.1"
   },
   "devDependencies": {
+    "@sucrase/jest-plugin": "^2.0.0",
     "@types/jest": "^24.0.18",
     "dedupe": "^3.0.1",
     "eslint": "^5.16.0",
