@@ -1,18 +1,20 @@
 /* eslint-env node */
 
+import typescript from 'rollup-plugin-typescript'
+
 export default [
   {
     input: 'src/index.js',
     output: [
       {
-        file: 'lib/bundle-imports-esm.js',
+        file: 'lib/index-esm.js',
         format: 'esm',
-        sourcemap: 'inline',
+        sourcemap: true,
       },
       {
-        file: 'lib/bundle-imports-cjs.js',
+        file: 'lib/index-cjs.js',
         format: 'cjs',
-        sourcemap: 'inline',
+        sourcemap: true,
       },
     ],
     external: [
@@ -22,5 +24,6 @@ export default [
       'rollup',
       'path',
     ],
+    plugins: [typescript()],
   },
 ]
