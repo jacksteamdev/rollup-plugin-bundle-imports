@@ -1,20 +1,41 @@
-import { createFilter } from 'rollup-pluginutils'
-import { rollup } from 'rollup'
 import path from 'path'
-
+import {
+  Plugin,
+  rollup,
+  RollupOptions,
+  SourceDescription,
+} from 'rollup'
 import commonjs from 'rollup-plugin-commonjs'
 import resolve from 'rollup-plugin-node-resolve'
-
+import { createFilter } from 'rollup-pluginutils'
 import generateCode from './generateCode'
+
+interface BundleImportOptions {
+  include?: string[]
+  exclude?: string[]
+  importAs?: string
+  options: {
+    plugins: Plugin[]
+    output: {
+      format: string
+      preferConst: boolean
+      [prop: string]: any
+    }
+    [prop: string]: any
+  }
+}
 
 const regex = /^(code|path) /
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
 export default bundleImports
+export function bundleImports(
+  options?: BundleImportOptions,
+): Plugin
 export function bundleImports({
   include = ['**/*.code.js', '**/*.code.ts'],
-  exclude,
+  exclude = [] as string[],
   importAs = 'code',
   options: {
     plugins = [resolve(), commonjs()],
@@ -70,25 +91,29 @@ export function bundleImports({
   const filter = createFilter(include, exclude)
 
   // Convert to arrays
-  const _include = [].concat(include)
-  const _exclude = exclude ? [].concat(exclude) : []
-  let _plugins = []
+  const _include = ([] as string[]).concat(include)
+  const _exclude = exclude
+    ? ([] as string[]).concat(exclude)
+    : ([] as string[])
+  let _plugins: Plugin[] = []
 
   // Handle multiple plugin instances
   // TODO: Limit plugin duplication during recursion
   // TODO: use nanoid to differentiate between plugins
   const name = `${pluginName}-${pluginCache.size}`
 
-  const pluginInstance = {
+  const pluginInstance: Plugin = {
     name,
 
-    options({ plugins: p }) {
+    options({ plugins: p = [] }: RollupOptions) {
       const _p = p
         // TODO: test does not crash when plugins array includes falsy values
         .filter((p) => typeof p === 'object')
         .filter(({ name: n }) => n !== name)
 
       _plugins = plugins.concat(_p)
+
+      return undefined
     },
 
     resolveId(importee, importer) {
@@ -146,33 +171,33 @@ export function bundleImports({
           return {
             code: `export const code = ${JSON.stringify(code)};`,
             map: { mappings: '' },
-          }
+          } as SourceDescription
         } else {
           const assetId = this.emitAsset(path.basename(id), code)
 
           return {
             code: `export default import.meta.ROLLUP_ASSET_URL_${assetId}`,
             map: { mappings: '' },
-          }
+          } as SourceDescription
         }
       } else {
         if (!filter(id)) return null
 
+        const config = {
+          include: _include,
+          exclude: _exclude.concat(id),
+          importAs,
+          options: {
+            plugins: _plugins,
+            ...inputOptions,
+            output,
+          },
+        }
+
         const bundle = await rollup({
           input: id,
           // Should exclude the current module in recursive bundles
-          plugins: _plugins.concat(
-            bundleImports({
-              include: _include,
-              exclude: _exclude.concat(id),
-              importAs,
-              options: {
-                plugins: _plugins,
-                ...inputOptions,
-                output,
-              },
-            }),
-          ),
+          plugins: _plugins.concat(bundleImports(config)),
           ...inputOptions,
         })
 
@@ -189,7 +214,7 @@ export function bundleImports({
           case 'code': {
             return {
               code: `export default ${JSON.stringify(code)};`,
-              map: { mappings: '' },
+              map: null,
             }
           }
 
@@ -201,7 +226,7 @@ export function bundleImports({
 
             return {
               code: `export default import.meta.ROLLUP_ASSET_URL_${assetId}`,
-              map: { mappings: '' },
+              map: null,
             }
           }
 
