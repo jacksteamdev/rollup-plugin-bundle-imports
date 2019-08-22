@@ -4,7 +4,7 @@ import typescript from 'rollup-plugin-typescript'
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: [
       {
         file: 'lib/index-esm.js',
@@ -15,6 +15,7 @@ export default [
         file: 'lib/index-cjs.js',
         format: 'cjs',
         sourcemap: true,
+        exports: 'named',
       },
     ],
     external: [
