@@ -1,8 +1,9 @@
-import { rollup, watch } from 'rollup'
+import { rollup } from 'rollup'
 import generateCode from '../../src/generateCode'
+import { setupWatcher } from '../setupWatcher'
 import config from './fixtures/rollup.config'
 
-test('returns a string', async () => {
+test.only('returns a string', async () => {
   const bundle = await rollup(config)
 
   const code = await generateCode(bundle, config)
@@ -17,11 +18,11 @@ test('bundles all imports', async () => {
 
   expect(code).toContain('const add')
   expect(code).toContain('const b')
-  expect(code).toContain('console.log(\'c\')')
+  expect(code).toContain("console.log('c')")
   expect(code).toContain('const codeAsString')
 })
 
-test('basic config watch', done => {
+test('basic config watch', (done) => {
   const spy = jest.fn()
 
   const expects = () => {
@@ -64,32 +65,3 @@ test.todo('basic config watch with changes')
 
 //   setupWatcher({ expects, config, done, spy })
 // })
-
-function setupWatcher({ expects, config, done, spy }) {
-  const watcher = watch(config)
-
-  watcher.on('event', spy)
-  watcher.on('event', event => {
-    try {
-      switch (event.code) {
-        case 'START':
-        case 'BUNDLE_START':
-        case 'BUNDLE_END':
-        case 'ERROR':
-          break
-
-        case 'END':
-          expects(event)
-          watcher.close()
-          done()
-          break
-
-        case 'FATAL':
-          throw new Error(event.code)
-      }
-    } catch (error) {
-      watcher.close()
-      done.fail(error)
-    }
-  })
-}

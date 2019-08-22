@@ -1,0 +1,1 @@
+export const code = "console.log('hey')"

@@ -7,6 +7,7 @@ import resolve from 'rollup-plugin-node-resolve'
 
 import generateCode from './generateCode'
 
+const regex = /^(code|path) /
 const pluginName = 'bundle-import'
 const pluginCache = new Map()
 
@@ -23,6 +24,7 @@ export function bundleImports({
     },
     ...inputOptions
   } = {},
+  useVirtualModule = false,
 } = {}) {
   const _id = JSON.stringify({
     include,
@@ -37,20 +39,26 @@ export function bundleImports({
     return pluginCache.get(_id)
   }
 
-  if (!include) {
-    throw new TypeError('options.include must be defined.')
-  }
+  if (!useVirtualModule) {
+    if (!include) {
+      throw new TypeError('options.include must be defined.')
+    }
 
-  if (!importAs) {
-    throw new TypeError('options.importAs must be defined.')
-  }
+    if (!importAs) {
+      throw new TypeError('options.importAs must be defined.')
+    }
 
-  if (!output) {
-    throw new TypeError('options.options.output must be defined')
-  }
+    if (!output) {
+      throw new TypeError(
+        'options.options.output must be defined',
+      )
+    }
 
-  if (!output.format) {
-    throw new TypeError('options.options.format must be defined')
+    if (!output.format) {
+      throw new TypeError(
+        'options.options.format must be defined',
+      )
+    }
   }
 
   // if (importAs === 'path' && output.format !== 'esm') {
@@ -80,53 +88,66 @@ export function bundleImports({
         .filter((p) => typeof p === 'object')
         .filter(({ name: n }) => n !== name)
 
-      _plugins = plugins
-        ? plugins.concat(
-            // Include other bundleImports instances
-            _p.filter(({ name: n }) => n.startsWith(pluginName)),
-          )
-        : _p
+      _plugins = plugins.concat(_p)
+    },
+
+    resolveId(importee, importer) {
+      if (importer && regex.test(importee)) {
+        const importAs = importee.startsWith('code')
+          ? 'code'
+          : 'path'
+
+        const filename = importee.replace(regex, '')
+        const dirname = path.dirname(importer)
+        const pathname = path.resolve(dirname, filename)
+
+        // TODO: calculate absolute file path
+        return `${importAs} ${pathname}`
+      } else {
+        return null
+      }
     },
 
     async load(id) {
-      if (!filter(id)) return null
+      if (useVirtualModule) {
+        if (!id.startsWith('code ') && !id.startsWith('path '))
+          return null
 
-      const bundle = await rollup({
-        input: id,
-        // Should exclude the current module in recursive bundles
-        plugins: _plugins.concat(
-          bundleImports({
-            include: _include,
-            exclude: _exclude.concat(id),
-            importAs,
-            options: {
-              plugins: _plugins,
-              ...inputOptions,
-              output,
-            },
-          }),
-        ),
-        ...inputOptions,
-      })
+        const input = id.replace(regex, '')
+        const importAs = id.startsWith('code') ? 'code' : 'path'
 
-      bundle.watchFiles.forEach((file) => {
-        this.addWatchFile(file)
-      })
-
-      const code = await generateCode(bundle, {
-        input: id,
-        output,
-      })
-
-      switch (importAs) {
-        case 'code': {
-          return {
-            code: `export default ${JSON.stringify(code)};`,
-            map: { mappings: '' },
-          }
+        const config = {
+          input,
+          // Should exclude the current module in recursive bundles
+          plugins: _plugins.concat(
+            bundleImports({
+              options: {
+                plugins: _plugins,
+                ...inputOptions,
+                output,
+              },
+            }),
+          ),
+          ...inputOptions,
         }
 
-        case 'path': {
+        const bundle = await rollup(config)
+
+        bundle.watchFiles.forEach((file) => {
+          this.addWatchFile(file)
+        })
+
+        const code = await generateCode(bundle, {
+          input,
+          output,
+        })
+
+        if (importAs === 'code') {
+          return {
+            code: `export const code = ${JSON.stringify(code)};`,
+            map: { mappings: '' },
+          }
+        } else {
           const assetId = this.emitAsset(path.basename(id), code)
 
           return {
@@ -134,11 +155,61 @@ export function bundleImports({
             map: { mappings: '' },
           }
         }
+      } else {
+        if (!filter(id)) return null
 
-        default: {
-          throw new TypeError(
-            `Unknown options.importAs: '${importAs}'`,
-          )
+        const bundle = await rollup({
+          input: id,
+          // Should exclude the current module in recursive bundles
+          plugins: _plugins.concat(
+            bundleImports({
+              include: _include,
+              exclude: _exclude.concat(id),
+              importAs,
+              options: {
+                plugins: _plugins,
+                ...inputOptions,
+                output,
+              },
+            }),
+          ),
+          ...inputOptions,
+        })
+
+        bundle.watchFiles.forEach((file) => {
+          this.addWatchFile(file)
+        })
+
+        const code = await generateCode(bundle, {
+          input: id,
+          output,
+        })
+
+        switch (importAs) {
+          case 'code': {
+            return {
+              code: `export default ${JSON.stringify(code)};`,
+              map: { mappings: '' },
+            }
+          }
+
+          case 'path': {
+            const assetId = this.emitAsset(
+              path.basename(id),
+              code,
+            )
+
+            return {
+              code: `export default import.meta.ROLLUP_ASSET_URL_${assetId}`,
+              map: { mappings: '' },
+            }
+          }
+
+          default: {
+            throw new TypeError(
+              `Unknown options.importAs: '${importAs}'`,
+            )
+          }
         }
       }
     },
