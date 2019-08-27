@@ -1,14 +1,15 @@
-import path from 'path'
+import * as path from 'path'
 import {
   Plugin,
   rollup,
   RollupOptions,
   SourceDescription,
 } from 'rollup'
-import commonjs from 'rollup-plugin-commonjs'
-import resolve from 'rollup-plugin-node-resolve'
 import { createFilter } from 'rollup-pluginutils'
 import generateCode from './generateCode'
+
+const commonjs = require('rollup-plugin-commonjs')
+const resolve = require('rollup-plugin-node-resolve')
 
 interface BundleImportOptions {
   include?: string[]
