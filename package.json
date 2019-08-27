@@ -27,7 +27,8 @@
     "test": "jest",
     "test:e2e": "jest e2e",
     "test:quick": "jest --testPathIgnorePatterns=e2e",
-    "postversion": "run-s build:pro build:types release"
+    "preversion": "run-s build:pro build:types",
+    "postversion": "run-s release"
   },
   "husky": {
     "hooks": {
