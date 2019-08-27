@@ -23,6 +23,7 @@ interface BundleImportOptions {
     }
     [prop: string]: any
   }
+  useVirtualModule: boolean
 }
 
 const regex = /^(code|path) /
