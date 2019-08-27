@@ -152,6 +152,7 @@ export function bundleImports({
                 ...inputOptions,
                 output,
               },
+              useVirtualModule,
             }),
           ),
           ...inputOptions,
@@ -193,6 +194,7 @@ export function bundleImports({
             ...inputOptions,
             output,
           },
+          useVirtualModule,
         }
 
         const bundle = await rollup({
