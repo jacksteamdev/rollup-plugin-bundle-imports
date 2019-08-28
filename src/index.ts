@@ -40,7 +40,7 @@ export function bundleImports({
   exclude = [] as string[],
   importAs = 'code',
   options: {
-    plugins = [resolve(), commonjs()],
+    plugins = [] as Plugin[],
     output = {
       format: 'iife',
       preferConst: true,
@@ -108,12 +108,20 @@ export function bundleImports({
     name,
 
     options({ plugins: p = [] }: RollupOptions) {
+      // Remove self from plugin array
       const _p = p
-        // TODO: test does not crash when plugins array includes falsy values
         .filter((p) => typeof p === 'object')
         .filter(({ name: n }) => n !== name)
 
-      _plugins = plugins.concat(_p)
+      const _commonjs =
+        !_p.some(({ name }) => name === 'commonjs') && commonjs()
+      const _resolve =
+        !_p.some(({ name }) => name === 'node-resolve') &&
+        resolve()
+
+      _plugins = [_resolve, _commonjs, ..._p].filter(
+        (p) => typeof p === 'object',
+      )
 
       return undefined
     },
