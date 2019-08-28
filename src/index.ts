@@ -108,10 +108,13 @@ export function bundleImports({
     name,
 
     options({ plugins: p = [] }: RollupOptions) {
+      console.log('🚀: options')
+
       // Remove self from plugin array
       const _p = p
         .filter((p) => typeof p === 'object')
         .filter(({ name: n }) => n !== name)
+        .filter(({ name: n }) => n !== 'chrome-extension')
 
       const _commonjs =
         !_p.some(({ name }) => name === 'commonjs') && commonjs()
@@ -148,6 +151,9 @@ export function bundleImports({
         if (!id.startsWith('code ') && !id.startsWith('path '))
           return null
 
+        console.log('🚀: load')
+        console.log('🚀: id', id)
+
         const input = id.replace(regex, '')
         const importAs = id.startsWith('code') ? 'code' : 'path'
 
@@ -167,16 +173,25 @@ export function bundleImports({
           ...inputOptions,
         }
 
+        console.log('🚀: config', config)
         const bundle = await rollup(config)
+        console.log('🚀: post-bundle')
 
         bundle.watchFiles.forEach((file) => {
           this.addWatchFile(file)
+        })
+
+        console.log('🚀: pre-generateCode', {
+          input,
+          output,
         })
 
         const code = await generateCode(bundle, {
           input,
           output,
         })
+
+        console.log('🚀: post-generateCode')
 
         if (importAs === 'code') {
           return {
