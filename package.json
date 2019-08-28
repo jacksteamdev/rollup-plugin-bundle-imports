@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-bundle-imports",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Bundle imports separately and use the result as a file path or a string of code.",
   "repository": "bumble-org/rollup-plugin-bundle-imports",
   "license": "MIT",
