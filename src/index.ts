@@ -8,8 +8,8 @@ import {
 import { createFilter } from 'rollup-pluginutils'
 import generateCode from './generateCode'
 
-const commonjs = require('rollup-plugin-commonjs')
-const resolve = require('rollup-plugin-node-resolve')
+const commonjs = require('@rollup/plugin-commonjs')
+const resolve = require('@rollup/plugin-node-resolve')
 
 interface BundleImportOptions {
   include?: string[]
@@ -112,7 +112,7 @@ export function bundleImports({
 
       // Remove self from plugin array
       const _p = p
-        .filter((p) => typeof p === 'object')
+        .filter((p): p is Plugin => !!p && typeof p === 'object')
         .filter(({ name: n }) => n !== name)
         .filter(({ name: n }) => n !== 'chrome-extension')
 
