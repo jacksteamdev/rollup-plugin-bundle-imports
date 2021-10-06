@@ -19,8 +19,8 @@ export default [
       },
     ],
     external: [
-      'rollup-plugin-commonjs',
-      'rollup-plugin-node-resolve',
+      '@rollup/plugin-commonjs',
+      '@rollup/plugin-node-resolve',
       'rollup-pluginutils',
       'rollup',
       'path',
