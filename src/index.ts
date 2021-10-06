@@ -1,3 +1,5 @@
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
 import * as path from 'path'
 import {
   Plugin,
@@ -7,9 +9,6 @@ import {
 } from 'rollup'
 import { createFilter } from 'rollup-pluginutils'
 import generateCode from './generateCode'
-
-const commonjs = require('@rollup/plugin-commonjs')
-const resolve = require('@rollup/plugin-node-resolve')
 
 interface BundleImportOptions {
   include?: string[]
@@ -123,7 +122,7 @@ export function bundleImports({
         resolve()
 
       _plugins = [_resolve, _commonjs, ..._p].filter(
-        (p) => typeof p === 'object',
+        (x): x is Plugin => !!x,
       )
 
       return undefined
@@ -188,6 +187,7 @@ export function bundleImports({
 
         const code = await generateCode(bundle, {
           input,
+          // @ts-ignore
           output,
         })
 
@@ -199,10 +199,14 @@ export function bundleImports({
             map: { mappings: '' },
           } as SourceDescription
         } else {
-          const assetId = this.emitAsset(path.basename(id), code)
+          const assetId = this.emitFile({
+            type: 'asset',
+            name: path.basename(id),
+            source: code,
+          })
 
           return {
-            code: `export default import.meta.ROLLUP_ASSET_URL_${assetId}`,
+            code: `export default import.meta.ROLLUP_FILE_URL_${assetId}`,
             map: { mappings: '' },
           } as SourceDescription
         }
@@ -234,6 +238,7 @@ export function bundleImports({
 
         const code = await generateCode(bundle, {
           input: id,
+          // @ts-ignore
           output,
         })
 
@@ -246,13 +251,14 @@ export function bundleImports({
           }
 
           case 'path': {
-            const assetId = this.emitAsset(
-              path.basename(id),
-              code,
-            )
+            const assetId = this.emitFile({
+              type: 'asset',
+              name: path.basename(id),
+              source: code,
+            })
 
             return {
-              code: `export default import.meta.ROLLUP_ASSET_URL_${assetId}`,
+              code: `export default import.meta.ROLLUP_FILE_URL_${assetId}`,
               map: null,
             }
           }

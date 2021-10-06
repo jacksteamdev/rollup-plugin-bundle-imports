@@ -1,4 +1,5 @@
 {
-    "jest.pathToJest": "yarn test",
-    "search.usePCRE2": true
+  "jest.pathToJest": "yarn test",
+  "search.usePCRE2": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
