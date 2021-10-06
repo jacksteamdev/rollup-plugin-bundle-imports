@@ -1,8 +1,8 @@
 /* eslint-env node */
 
 import { bundleImports } from '../../../src/index'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 
 const bundleImportSpy = bundleImports({
   include: ['**/*.code.js'],

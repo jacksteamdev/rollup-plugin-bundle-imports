@@ -13,13 +13,13 @@ test('returns a string', async () => {
 test('bundles all imports', async () => {
   const bundle = await rollup(config)
 
-  const { output } = await bundle.generate(config)
+  const { output } = await bundle.generate(config.output)
   const chunk = output.find(({ code }) => {
     return code
   })
 
-  const asset = output.find(({ isAsset }) => {
-    return isAsset
+  const asset = output.find(({ type }) => {
+    return type === 'asset'
   })
 
   expect(output.length).toBe(2)
@@ -27,10 +27,10 @@ test('bundles all imports', async () => {
     'navigator.serviceWorker.register(sw)',
   )
   expect(asset.source).toContain('const b')
-  expect(asset.source).toContain('console.log(\'c\')')
+  expect(asset.source).toContain("console.log('c')")
 })
 
-test('sw config watch', done => {
+test('sw config watch', (done) => {
   const spy = jest.fn()
 
   const expects = () => {
@@ -78,7 +78,7 @@ function setupWatcher({ expects, config, done, spy }) {
   const watcher = watch(config)
 
   watcher.on('event', spy)
-  watcher.on('event', event => {
+  watcher.on('event', (event) => {
     try {
       switch (event.code) {
         case 'START':

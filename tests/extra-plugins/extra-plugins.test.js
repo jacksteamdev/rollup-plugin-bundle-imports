@@ -23,8 +23,8 @@ import {
   plugin,
 } from './fixtures/rollup.config'
 
-import cjs from 'rollup-plugin-commonjs'
-import res from 'rollup-plugin-node-resolve'
+import cjs from '@rollup/plugin-commonjs'
+import res from '@rollup/plugin-node-resolve'
 
 const commonjs = cjs()
 const resolve = res()
